@@ -12,7 +12,7 @@ firebase.initializeApp(firebaseConfig);
 
 // Get a reference to the database service
 const db = firebase.database();
-const ipRef = db.ref('ipAddresses');
+const ipRef = db.ref('/ipAddresses');
 
 // Function to fetch and display IP addresses
 function fetchAndDisplayIPs() {
