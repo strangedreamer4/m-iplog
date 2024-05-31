@@ -1,11 +1,11 @@
 const firebaseConfig = {
     apiKey: "AIzaSyCnEro4k5RdqTljsTgny85dNiiGMChYbkk",
     authDomain: "m-iplog.firebaseapp.com",
-    databaseURL: "https://m-iplog-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "m-iplog",
     storageBucket: "m-iplog.appspot.com",
     messagingSenderId: "915213232842",
-    appId: "1:915213232842:web:3c7ae45975b3f3e50e2233"
+    appId: "1:915213232842:web:3c7ae45975b3f3e50e2233",
+    databaseURL: "https://m-iplog-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -33,4 +33,4 @@ function fetchIPs() {
     });
 }
 
-fetchIPs();
+fetchIPs();   
