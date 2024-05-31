@@ -20,9 +20,11 @@ function fetchAndDisplayIPs() {
         .then((snapshot) => {
             const ipList = document.getElementById('ip-list');
             ipList.innerHTML = ''; // Clear the list before adding new IPs
+            console.log("Snapshot data: ", snapshot.val()); // Log the snapshot data for debugging
             snapshot.forEach((childSnapshot) => {
                 const ip = childSnapshot.val();
                 const ipItem = document.createElement('div');
+                ipItem.classList.add('ip-item');
                 ipItem.textContent = ip;
                 ipList.appendChild(ipItem);
             });
