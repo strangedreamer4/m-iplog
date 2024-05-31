@@ -3,17 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User IP Logs</title>
+    <title>IP Log Viewer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>User IP Logs</h1>
-    <ul id="ipList"></ul>
-    <button id="clearBtn">Clear Log</button>
-    <button id="downloadBtn">Download Log</button>
+    <div class="container">
+        <h1>Logged IP Addresses</h1>
+        <ul id="ipList"></ul>
+    </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js"></script>
-    <script src="script.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
+    <script>
+const firebaseConfig = {
+             apiKey: "AIzaSyCnEro4k5RdqTljsTgny85dNiiGMChYbkk",
+             authDomain: "m-iplog.firebaseapp.com",
+             databaseURL: "https://m-iplog-default-rtdb.asia-southeast1.firebasedatabase.app",
+             projectId: "m-iplog",
+             storageBucket: "m-iplog.appspot.com",
+             messagingSenderId: "915213232842",
+             appId: "1:915213232842:web:3c7ae45975b3f3e50e2233"
+};
+        firebase.initializeApp(firebaseConfig);
+
+        const database = firebase.database();
+        const ipList = document.getElementById('ipList');
+
+        function displayIPs() {
+            database.ref('ipAddresses').once('value', (snapshot) => {
+                snapshot.forEach((childSnapshot) => {
+                    const ipAddress = childSnapshot.val().ipAddress;
+                    const li = document.createElement('li');
+                    li.textContent = ipAddress;
+                    ipList.appendChild(li);
+                });
+            });
+        }
+
+        window.onload = () => {
+            displayIPs();
+        };
+    </script>
 </body>
 </html>
