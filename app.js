@@ -12,20 +12,24 @@ firebase.initializeApp(firebaseConfig);
 
 // Get a reference to the database service
 const db = firebase.database();
-const ipRef = db.ref('/ipAddresses');
+const ipRef = db.ref('ipAddresses');
 
 // Function to fetch and display IP addresses
 function fetchAndDisplayIPs() {
-    ipRef.once('value', (snapshot) => {
-        const ipList = document.getElementById('ip-list');
-        ipList.innerHTML = ''; // Clear the list before adding new IPs
-        snapshot.forEach((childSnapshot) => {
-            const ip = childSnapshot.val();
-            const ipItem = document.createElement('div');
-            ipItem.textContent = ip;
-            ipList.appendChild(ipItem);
+    ipRef.once('value')
+        .then((snapshot) => {
+            const ipList = document.getElementById('ip-list');
+            ipList.innerHTML = ''; // Clear the list before adding new IPs
+            snapshot.forEach((childSnapshot) => {
+                const ip = childSnapshot.val();
+                const ipItem = document.createElement('div');
+                ipItem.textContent = ip;
+                ipList.appendChild(ipItem);
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching IP addresses:", error);
         });
-    });
 }
 
 // Fetch and display IP addresses when the page loads
