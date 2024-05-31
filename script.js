@@ -10,44 +10,63 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
 
-// Function to fetch and display IP logs
-function fetchAndDisplayLogs() {
-    const ipList = document.getElementById('ipList');
-    ipList.innerHTML = '';
+const db = firebase.database();
+const messagesRef = db.ref('messages');
 
-    db.collection("ip_logs").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            const ip_address = doc.data().ip_address;
-            const li = document.createElement('li');
-            li.textContent = ip_address;
-            ipList.appendChild(li);
+document.getElementById('clear-button').addEventListener('click', clearChat);
+document.getElementById('save-log-button').addEventListener('click', saveLog); // Add event listener
+
+messagesRef.on('child_added', function(snapshot) {
+    const message = snapshot.val();
+    displayMessage(message.timestamp, message.username, message.message, message.ip);
+});
+
+function displayMessage(timestamp, username, message, ip) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-message');
+    const date = new Date(timestamp);
+    const formattedTimestamp = date.toLocaleString();
+
+    messageElement.innerHTML = `
+        <div><strong>${formattedTimestamp}</strong> - <em>User ID: ${username}</em> - <em>IP: ${ip}</em></div>
+        <div>${message}</div>
+    `;
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the bottom
+}
+
+function clearChat() {
+    if (confirm("Are you sure you want to clear the chat log?")) {
+        messagesRef.remove();
+        document.getElementById('chat-messages').innerHTML = '';
+    }
+}
+
+function saveLog() {
+    messagesRef.once('value', function(snapshot) {
+        const messages = snapshot.val();
+        if (!messages) {
+            alert('No messages to save.');
+            return;
+        }
+
+        const logData = Object.values(messages).map(message => {
+            return `${message.timestamp} - User ID: ${message.username} - IP: ${message.ip} - ${message.message}`;
         });
+
+        const logContent = logData.join('\n');
+        const blob = new Blob([logContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'chat-log.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        URL.revokeObjectURL(url);
     });
 }
-
-// Function to clear IP logs
-function clearLogs() {
-    db.collection("ip_logs").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            db.collection("ip_logs").doc(doc.id).delete();
-        });
-    });
-    fetchAndDisplayLogs();
-}
-
-// Function to download IP logs
-function downloadLogs() {
-    // Implement download logic here
-    // For simplicity, you can display logs in a new window/tab and prompt user to save it.
-}
-
-// Fetch and display IP logs on page load
-window.onload = function() {
-    fetchAndDisplayLogs();
-}
-
-// Event listeners for buttons
-document.getElementById('clearBtn').addEventListener('click', clearLogs);
-document.getElementById('downloadBtn').addEventListener('click', downloadLogs);
