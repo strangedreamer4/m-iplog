@@ -3,89 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Log Viewer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 5px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-        }
-    </style>
+    <title>Terchat - Web Chat Log</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Logged IP Addresses</h1>
-        <ul id="ipList"></ul>
+    <div class="chat-container">
+        <header class="chat-header">
+            <h1>Terchat - Web Chat Log</h1>
+        </header>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-controls">
+            <button id="clear-button">Clear Chat</button>
+            <button id="save-log-button">Save Log</button> <!-- New button -->
+        </div>
     </div>
+    <script>
+		
+         
 
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
-    <!-- Add Firebase products that you want to use -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
+</script>
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "firebase/app";
-        import { getDatabase, ref, onValue } from "firebase/database";
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCnEro4k5RdqTljsTgny85dNiiGMChYbkk",
-            authDomain: "m-iplog.firebaseapp.com",
-            databaseURL: "https://m-iplog-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "m-iplog",
-            storageBucket: "m-iplog.appspot.com",
-            messagingSenderId: "915213232842",
-            appId: "1:915213232842:web:3c7ae45975b3f3e50e2233"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const ipList = document.getElementById('ipList');
-
-        function displayIPs() {
-            const ipRef = ref(database, 'ipAddresses');
-            onValue(ipRef, (snapshot) => {
-                ipList.innerHTML = ''; // Clear previous list
-                snapshot.forEach((childSnapshot) => {
-                    const ipAddress = childSnapshot.val().ipAddress;
-                    const li = document.createElement('li');
-                    li.textContent = ipAddress;
-                    ipList.appendChild(li);
-                });
-            });
-        }
-
-        window.onload = () => {
-            displayIPs();
-        };
-    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
