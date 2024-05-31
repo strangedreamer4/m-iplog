@@ -22,6 +22,7 @@ refreshButton.addEventListener('click', () => {
 
 function fetchIPs() {
     ipRef.once('value', (snapshot) => {
+        console.log("Snapshot:", snapshot.val()); // Log the snapshot
         ipList.innerHTML = ''; // Clear the list
         snapshot.forEach((childSnapshot) => {
             const ip = childSnapshot.val();
@@ -32,5 +33,3 @@ function fetchIPs() {
         });
     });
 }
-
-fetchIPs();   
