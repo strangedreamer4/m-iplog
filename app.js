@@ -10,26 +10,26 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+// Get a reference to the database service
 const db = firebase.database();
 const ipRef = db.ref('ipAddresses');
 
-const ipList = document.getElementById('ip-list');
-const refreshButton = document.getElementById('refresh-button');
-
-refreshButton.addEventListener('click', () => {
-    fetchIPs();
-});
-
-function fetchIPs() {
+// Function to fetch and display IP addresses
+function fetchAndDisplayIPs() {
     ipRef.once('value', (snapshot) => {
-        console.log("Snapshot:", snapshot.val()); // Log the snapshot
-        ipList.innerHTML = ''; // Clear the list
+        const ipList = document.getElementById('ip-list');
+        ipList.innerHTML = ''; // Clear the list before adding new IPs
         snapshot.forEach((childSnapshot) => {
             const ip = childSnapshot.val();
             const ipItem = document.createElement('div');
-            ipItem.classList.add('ip-item');
             ipItem.textContent = ip;
             ipList.appendChild(ipItem);
         });
     });
 }
+
+// Fetch and display IP addresses when the page loads
+window.addEventListener('load', fetchAndDisplayIPs);
+
+// Refresh IP addresses when refresh button is clicked
+document.getElementById('refresh-button').addEventListener('click', fetchAndDisplayIPs);
